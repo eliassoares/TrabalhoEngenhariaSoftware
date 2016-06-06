@@ -1,38 +1,46 @@
 package principal;
 
-import java.util.Date;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Eleicao {
 
-	private Date inicio;
-	private Date fim;
-	private List<Candidato> listaDeCandidatos = new LinkedList<>();
+	private List<Candidato> listaDePresidentes;
+	private List<Candidato> listaDeSenadores;
+	private List<Eleitor> listaDeEleitores = new LinkedList<>();
 	private List<Integer> eleitoresQueVotaram = new LinkedList<>();
 	private Votos votos;
 
-	public Eleicao(Date inicio, Date fim, List<Candidato> listaDeCandidatos) {
-
-		this.inicio = inicio;
-		this.fim = fim;
-		this.listaDeCandidatos = listaDeCandidatos;
+	public Eleicao (List<Candidato> listaDePresidentes, List<Candidato> listaDeSenadores, List<Eleitor> listaDeEleitores) {
+		this.listaDePresidentes = listaDePresidentes;
+		this.listaDeSenadores = listaDeSenadores;
+		this.listaDeEleitores = listaDeEleitores;
 	}
 
-	public Date getInicio() {
-		return inicio;
-	}
-
-	public Date getFim() {
-		return fim;
-	}
-
-	public List<Candidato> getListaDeCandidatos() {
-		return listaDeCandidatos;
+	public boolean hasEleitor(Integer tituloEleitor) {
+		for (Iterator iterator = this.listaDeEleitores.iterator(); iterator.hasNext();) {
+			Eleitor eleitor = (Eleitor) iterator.next();
+			if(eleitor.getTituloDeEleitor().intValue() == tituloEleitor.intValue()) {
+				return true;
+			}
+			
+		}
+		return false;
 	}
 
 	public List<Integer> getEleitoresQueVotaram() {
 		return eleitoresQueVotaram;
+	}
+	
+	public String getEleitorName(Integer titulo) {
+		for (Iterator iterator = this.listaDeEleitores.iterator(); iterator.hasNext();) {
+			Eleitor eleitor = (Eleitor) iterator.next();
+			if(eleitor.getTituloDeEleitor().intValue() == titulo.intValue()) {
+				return eleitor.getNome();
+			}
+		}
+		return null;
 	}
 
 	public Votos getVotos() {
