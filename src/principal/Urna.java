@@ -12,7 +12,9 @@ public class Urna {
 
 	private Integer numeroDeSerie;
 	private List<Eleitor> listaDeEleitores = new LinkedList<>();
-	private List<Candidato> listaDeCandidatos = new LinkedList<>();
+	// É importante separar os tipos de candidatos para saber se quando iniciar a eleição, se há no mínimo um de cada.
+	private List<Candidato> listaDePresidentes = new LinkedList<>();
+	private List<Candidato> listaDeSenadores = new LinkedList<>();
 	private Funcionario funcionario;
 	private Eleicao eleicao;
 	
@@ -37,22 +39,33 @@ public class Urna {
 		this.numeroDeSerie = numeroDeSerie;
 	}
 
-	public List<Eleitor> getListaDeEleitores() {
-		return listaDeEleitores;
+	public Integer getQuantidadePresidentes() {
+		return this.listaDePresidentes.size();
 	}
 	
-	public void setEleicao(Date inicio, Date fim) {
-		this.eleicao = new Eleicao(inicio, fim, this.listaDeCandidatos);
+	public Integer getQuantidadeSenadores() {
+		return this.listaDeSenadores.size();
 	}
 	
 	public void cadrastraEleitores(String nome, Integer tituloDeEleitor) {
 		this.listaDeEleitores.add(new Eleitor(nome, tituloDeEleitor));
+		JOptionPane.showMessageDialog(null, "Eleitor cadatrado com sucesso!", "Sucesso no cadastro.", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	public void cadrastaCandidatos(String nome, Integer tituloDeEleitor,
+	public void cadastraCandidatos(String nome, Integer tituloDeEleitor,
 			Integer numeroDeVotacao, String partido, String tipoDeCandidato,
 			BufferedImage foto) {
-		this.listaDeCandidatos.add(new Candidato(nome, tituloDeEleitor, numeroDeVotacao, partido, tipoDeCandidato, foto));
+		
+		if(tipoDeCandidato.toLowerCase().equals("presidente")) {
+			this.listaDePresidentes.add(new Candidato(nome, tituloDeEleitor, numeroDeVotacao, partido, tipoDeCandidato, foto));
+			JOptionPane.showMessageDialog(null, "Candidato cadatrado com sucesso!", "Sucesso no cadastro.", JOptionPane.INFORMATION_MESSAGE);
+		} else if(tipoDeCandidato.toLowerCase().equals("senador")) {
+			this.listaDeSenadores.add(new Candidato(nome, tituloDeEleitor, numeroDeVotacao, partido, tipoDeCandidato, foto));
+			JOptionPane.showMessageDialog(null, "Candidato cadatrado com sucesso!", "Sucesso no cadastro.", JOptionPane.INFORMATION_MESSAGE);
+		}
+		else {
+			JOptionPane.showMessageDialog(null, "Tipo de candidato inserido não existe!", "Erro no cadastro", JOptionPane.ERROR_MESSAGE);
+		}
 	}
 	
 	private boolean isFuncionarioValido(Integer matricula, Integer senha) {

@@ -6,7 +6,7 @@ public class Candidato extends APessoa {
 
 	private Integer numeroDeVotacao;
 	private String partido;
-	private String tipoDeCandidato; // pode ser ou Presidente ou Senado
+	private String tipoDeCandidato; // pode ser ou Presidente ou Senador
 	private BufferedImage foto;
 
 	public Candidato(String nome, Integer tituloDeEleitor,
