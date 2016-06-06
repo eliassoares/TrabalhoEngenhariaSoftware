@@ -17,12 +17,13 @@ public class Urna {
 	private Eleicao eleicao;
 	
 	public Urna(Integer numeroDeSerie, String nomeFuncionario, Integer tituloDeEleitor, Integer matricula, Integer senha) {
-		/*
+		
 		while(!this.isFuncionarioValido(matricula, senha)) {
-			matricula = Integer.valueOf(JOptionPane.showInputDialog("Matrícula não válida!"));
-			senha = Integer.valueOf(JOptionPane.showInputDialog("Senha inválida!"));
-		}*/
-		JOptionPane.showMessageDialog(null, "Funcionário logado!");
+			JOptionPane.showMessageDialog(null, "A senha ou a matrícula foi digitada incorretamente!");
+			matricula = Integer.valueOf(JOptionPane.showInputDialog("Digite a matrícula novamente!"));
+			senha = Integer.valueOf(JOptionPane.showInputDialog("Digite a senha novamente!"));
+		}
+		JOptionPane.showMessageDialog(null, "Funcionário logado com sucesso!");
 		
 		this.funcionario = new Funcionario(nomeFuncionario, tituloDeEleitor, matricula, senha);
 		this.numeroDeSerie = numeroDeSerie;
@@ -57,8 +58,6 @@ public class Urna {
 	private boolean isFuncionarioValido(Integer matricula, Integer senha) {
 		Integer senhaPadrao = 1234567;
 		Integer matriculaPadrao = 2011049053;
-		System.out.println(matricula==matriculaPadrao);
-		System.out.println(senha==senhaPadrao);
-		return (senhaPadrao == senha) && (matriculaPadrao == matricula);
+		return (matricula.intValue() == matriculaPadrao.intValue()) && (senha.intValue() == senhaPadrao.intValue());
 	}
 }

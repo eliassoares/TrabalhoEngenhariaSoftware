@@ -5,7 +5,7 @@ import javax.swing.JOptionPane;
 public class Main {
 
 	public static void main(String[] args) {
-		Integer senha = 1234567;
+		Integer senha = 123456;
 		Integer matricula = 2011049053;
 		Urna urna = new Urna(123, "elias", 12, matricula,senha);
 		
