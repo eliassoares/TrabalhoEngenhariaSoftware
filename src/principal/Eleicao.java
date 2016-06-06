@@ -16,32 +16,16 @@ public class Eleicao {
 		this.listaDePresidentes = listaDePresidentes;
 		this.listaDeSenadores = listaDeSenadores;
 		this.listaDeEleitores = listaDeEleitores;
+		this.votos = new Votos();
 	}
 
-	public boolean hasEleitor(Integer tituloEleitor) {
-		for (Iterator iterator = this.listaDeEleitores.iterator(); iterator.hasNext();) {
-			Eleitor eleitor = (Eleitor) iterator.next();
-			if(eleitor.getTituloDeEleitor().intValue() == tituloEleitor.intValue()) {
-				return true;
-			}
-			
-		}
-		return false;
-	}
+	
 
 	public List<Integer> getEleitoresQueVotaram() {
 		return eleitoresQueVotaram;
 	}
 	
-	public String getEleitorName(Integer titulo) {
-		for (Iterator iterator = this.listaDeEleitores.iterator(); iterator.hasNext();) {
-			Eleitor eleitor = (Eleitor) iterator.next();
-			if(eleitor.getTituloDeEleitor().intValue() == titulo.intValue()) {
-				return eleitor.getNome();
-			}
-		}
-		return null;
-	}
+	
 
 	public Votos getVotos() {
 		return votos;
