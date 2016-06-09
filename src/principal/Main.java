@@ -2,32 +2,39 @@ package principal;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import javax.swing.JOptionPane;
 
 public class Main {
 
+	// Dados gerais
+	private static String PRESIDENTE = "presidente";
+	private static String SENADOR = "senador";
+
+	// Dados da urna
+	private static Integer NUM_SERIE = 777;
+
+	// Dados do funcionario
+	private static String FUNCIONARIO_NOME = "Alan Turing";
+	private static Integer FUNCIONARIO_MATRICULA = 0;
+	private static Integer FUNCIONARIO_SENHA = 0;
+	private static Integer FUNCIONARIO_TITULO = 123456789;
+
 	public static void main(String[] args) {
 
-		Integer senha = 1234567;
-		Integer matricula = 2011049053;
-		String nomeFuncionario = "Alan Turing";
-		Integer titulofuncionario = 2011049053;
-		Integer numeroDeSerie = 666;
-
 		// Cria uma nova urna
-		Urna urna = new Urna(numeroDeSerie, nomeFuncionario, titulofuncionario,
-				matricula, senha);
+		Urna urna = new Urna(NUM_SERIE, FUNCIONARIO_NOME, FUNCIONARIO_TITULO,
+				FUNCIONARIO_MATRICULA, FUNCIONARIO_SENHA);
 
 		// TODO REMOVER
-		urna.cadastraCandidatos("Dilma Pão com Salame", 131313, 13, "PT",
-				"Presidente", null);
-		urna.cadastraCandidatos("Aecio CheiraPó", 454545, 45, "PSDB",
-				"Presidente", null);
-		urna.cadastraCandidatos("Sou um eleitor que não conhece os senadores",
-				13131, 13, "PT", "senador", null);
-		urna.cadastraCandidatos("Que orgulho de mim", 45454, 45, "PSDB",
-				"senador", null);
-		urna.cadastrarEleitor("Elias Soares", 8);
+		urna.cadastraCandidatos("Dilma", 1313, 13, "PT", PRESIDENTE, null);
+		urna.cadastraCandidatos("Aecio", 4545, 45, "PSDB", PRESIDENTE, null);
+		urna.cadastraCandidatos("Delcidio", 131313, 130, "PT", SENADOR, null);
+		urna.cadastraCandidatos("Juca", 454545, 450, "PSDB", SENADOR, null);
+		urna.cadastrarEleitor("Eleitor 1", 1);
+		urna.cadastrarEleitor("Eleitor 2", 2);
+		urna.cadastrarEleitor("Eleitor 3", 3);
+		urna.cadastrarEleitor("Eleitor 4", 4);
 
 		String opcoes[] = { "Cadastrar Eleitor", "Cadastrar Candidato",
 				"Iniciar Eleição", "Sair" };
@@ -115,24 +122,31 @@ public class Main {
 			String escolhaOpcao1 = (String) JOptionPane.showInputDialog(null,
 					"Funcionário, que deseja fazer?", "Escolha algo",
 					JOptionPane.QUESTION_MESSAGE, null, opcoes2, opcoes2[3]);
+			// Mostrar resultados de todos os candidatos
 			if (escolhaOpcao1.equalsIgnoreCase(opcoes2[0])) {
-				// JOptionPane.showMessageDialog(null,
-				// urna.getPresidentesResultados(),
-				// "Resultados dos presidentes",
-				// JOptionPane.INFORMATION_MESSAGE);
-				// JOptionPane.showMessageDialog(null,
-				// urna.getSenadoresResultados(), "Resultados dos senadores",
-				// JOptionPane.INFORMATION_MESSAGE);
-				JOptionPane.showMessageDialog(null, "Ainda não implementado");
-			} else if (escolhaOpcao1.equalsIgnoreCase(opcoes2[1])) {
-				JOptionPane.showMessageDialog(null, "Ainda não implementado");
-			} else if (escolhaOpcao1.equalsIgnoreCase(opcoes2[2])) {
-				JOptionPane.showMessageDialog(null, "Ainda não implementado");
-			} else if (escolhaOpcao1.equalsIgnoreCase(opcoes2[3])) {
+				JOptionPane.showMessageDialog(
+						null,
+						urna.getPresidentesResultados()
+								+ urna.getSenadoresResultados());
+			}
+			// Mostrar os ganhadores
+			else if (escolhaOpcao1.equalsIgnoreCase(opcoes2[1])) {
+				// Mostra os resultados dos vencedores
+				JOptionPane.showMessageDialog(null, urna.getVencedores());
+			}
+			// Mostrar as estatísticas gerais
+			else if (escolhaOpcao1.equalsIgnoreCase(opcoes2[2])) {
+				JOptionPane.showMessageDialog(null,
+						urna.getEstatisticasGerais());
+			}
+			// Sair
+			else if (escolhaOpcao1.equalsIgnoreCase(opcoes2[3])) {
 				JOptionPane.showMessageDialog(null, "Saindo do sistema.");
 				break;
 			}
 		}
+
+		// TODO implementar voto nulo
 	}
 
 	/**
@@ -166,7 +180,8 @@ public class Main {
 			try {
 				tituloDeEleitor = Integer.valueOf(JOptionPane.showInputDialog(
 						null, "Insira o titulo do candidato:"));
-				break;
+				if (tituloDeEleitor > 0)
+					break;
 			} catch (Exception e) {
 
 			}
@@ -198,10 +213,10 @@ public class Main {
 				"Insira o tipo do candidato: Presidente ou Senador");
 
 		// executa até o tipo de candidato digitado ser presidente ou senador
-		while (!tipoDeCandidato.equals("Presidente")
-				&& !tipoDeCandidato.equals("Senador")) {
+		while (!tipoDeCandidato.toLowerCase().equals(PRESIDENTE)
+				&& !tipoDeCandidato.toLowerCase().equals(SENADOR)) {
 			tipoDeCandidato = JOptionPane.showInputDialog(null,
-					"Insira o tipo do candidato: Presidente ou Senador");
+					"Insira o tipo do candidato: presidente ou senador");
 		}
 
 		boolean resultadoCadastro = urna.cadastraCandidatos(nome,
@@ -372,13 +387,13 @@ public class Main {
 					if (urna.isPresidenteValido(numero)) {
 
 						int escolha = JOptionPane.showConfirmDialog(null,
-								"Tem certeza que votará nesse ser vivo?",
+								"Tem certeza que votará nesse presidente?",
 								"Confirme seu voto", JOptionPane.OK_OPTION);
 
 						// Confirmou o voto:
 						if (escolha == JOptionPane.OK_OPTION) {
 
-							urna.computarVoto(tituloEleitor, numero);
+							urna.computarVoto(tituloEleitor, numero, PRESIDENTE);
 							break;
 						}
 					} else {
@@ -396,7 +411,7 @@ public class Main {
 
 					// Confirmou o voto:
 					if (escolha == JOptionPane.OK_OPTION) {
-						urna.computarVoto(tituloEleitor, -1);
+						urna.computarVoto(tituloEleitor, -1, PRESIDENTE);
 						break;
 					}
 
@@ -438,16 +453,16 @@ public class Main {
 						}
 					}
 
-					if (urna.isPresidenteValido(numero)) {
+					if (urna.isSenadorValido(numero)) {
 
 						int escolha = JOptionPane.showConfirmDialog(null,
-								"Tem certeza que votará nesse ser vivo?",
+								"Tem certeza que votará nesse senador?",
 								"Confirme seu voto", JOptionPane.OK_OPTION);
 
 						// Confirmou o voto:
 						if (escolha == JOptionPane.OK_OPTION) {
 
-							urna.computarVoto(tituloEleitor, numero);
+							urna.computarVoto(tituloEleitor, numero, SENADOR);
 							break;
 						}
 					} else {
@@ -466,7 +481,7 @@ public class Main {
 					// Confirmou o voto:
 					if (escolha == JOptionPane.OK_OPTION) {
 
-						urna.computarVoto(tituloEleitor, -1);
+						urna.computarVoto(tituloEleitor, -1, SENADOR);
 						break;
 					}
 				}
@@ -526,14 +541,13 @@ public class Main {
 
 			} else if (escolhaOpcao3.equalsIgnoreCase(opcoes3[1])) {
 
-				System.out.println(888);
 				break;
 			}
 		}
 
 		if (login) {
 			JOptionPane.showMessageDialog(null, "Teminando a Eleição!");
-			urna.finalizaEleicao();
+			urna.finalizarEleicao();
 			return true;
 		}
 		return false;

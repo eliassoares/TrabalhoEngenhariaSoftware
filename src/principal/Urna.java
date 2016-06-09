@@ -10,12 +10,17 @@ import java.util.Map;
 
 import javax.swing.JOptionPane;
 
+import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
+
 public class Urna {
+
+	private static Integer MATRICULA_PADRAO = 0;
+	private static Integer SENHA_PADRAO = 0;
+	private static String PRESIDENTE = "presidente";
+	private static String SENADOR = "senador";
 
 	private Integer numeroDeSerie;
 	private List<Eleitor> listaDeEleitores = new LinkedList<>();
-	// É importante separar os tipos de candidatos para saber se quando iniciar
-	// a eleição, se há no mínimo um de cada.
 	private List<Candidato> listaDePresidentes = new LinkedList<>();
 	private List<Candidato> listaDeSenadores = new LinkedList<>();
 	private Funcionario funcionario;
@@ -102,15 +107,26 @@ public class Urna {
 			return false;
 		}
 
+		// Verifica se há um candidato, seja ele presidente ou senador, com o
+		// mesmo número de votacao, se sim, recusa a inserção
+		for (Candidato c : this.listaDeSenadores) {
+			if (c.getNumeroDeVotacao().equals(numeroDeVotacao))
+				return false;
+		}
+		for (Candidato c : this.listaDePresidentes) {
+			if (c.getNumeroDeVotacao().equals(numeroDeVotacao))
+				return false;
+		}
+
 		// Antes de inserir, verifica se ele já foi inserido alguma vez:
-		if ((tipoDeCandidato.toLowerCase().equals("presidente"))
+		if ((tipoDeCandidato.toLowerCase().equals(PRESIDENTE))
 				&& (!this.isPresidenteValido(numeroDeVotacao))) {
 
 			this.listaDePresidentes.add(new Candidato(nome, tituloDeEleitor,
 					numeroDeVotacao, partido, tipoDeCandidato, foto));
 			this.cadastrarEleitor(nome, tituloDeEleitor);
 
-		} else if ((tipoDeCandidato.toLowerCase().equals("senador"))
+		} else if ((tipoDeCandidato.toLowerCase().equals(SENADOR))
 				&& (!this.isSenadorValido(numeroDeVotacao))) {
 
 			this.listaDeSenadores.add(new Candidato(nome, tituloDeEleitor,
@@ -132,11 +148,8 @@ public class Urna {
 	 */
 	public boolean isFuncionarioValido(Integer matricula, Integer senha) {
 
-		Integer senhaPadrao = 1234567;
-		Integer matriculaPadrao = 2011049053;
-
-		return (matricula.intValue() == matriculaPadrao.intValue())
-				&& (senha.intValue() == senhaPadrao.intValue());
+		return (matricula.intValue() == MATRICULA_PADRAO.intValue())
+				&& (senha.intValue() == SENHA_PADRAO.intValue());
 	}
 
 	/**
@@ -218,7 +231,7 @@ public class Urna {
 	/**
 	 * Finaliza uma eleição em andamento
 	 */
-	public void finalizaEleicao() {
+	public void finalizarEleicao() {
 
 	}
 
@@ -295,9 +308,12 @@ public class Urna {
 	 * 
 	 * @param tituloEleitor
 	 * @param numeroCandidato
+	 * @param tipoDeCandidato
+	 *            pode ser presidente ou senador
 	 * @return True, se o voto foi registrado, e false se o eleitor já voltou
 	 */
-	public boolean computarVoto(Integer tituloEleitor, Integer numeroCandidato) {
+	public boolean computarVoto(Integer tituloEleitor, Integer numeroCandidato,
+			String tipoDeCandidato) {
 
 		// Se o eleitor já voltou, não registra seu voto
 		if (this.jaVotou(tituloEleitor)) {
@@ -306,11 +322,13 @@ public class Urna {
 
 		this.totalVotos++;
 
-		Voto novo = new Voto(tituloEleitor, numeroCandidato);
+		Voto novo = new Voto(tituloEleitor, numeroCandidato, tipoDeCandidato);
 
 		this.votos.add(novo);
 
-		this.jaVotaram.add(tituloEleitor);
+		if (tipoDeCandidato.toLowerCase().equals(SENADOR.toLowerCase())) {
+			this.jaVotaram.add(tituloEleitor);
+		}
 
 		return true;
 	}
@@ -327,6 +345,41 @@ public class Urna {
 	}
 
 	/**
+	 * Retorna o número de votos que um dado candidato recebeu
+	 * 
+	 * @param c
+	 *            candidato que vai ser analisado
+	 * @return número de votos
+	 */
+	public Integer getNumeroVotos(Candidato c) {
+
+		Integer numeroVotos = 0;
+
+		for (Voto v : this.votos) {
+			if (v.numeroCandidato.equals(c.getNumeroDeVotacao()))
+				numeroVotos++;
+		}
+
+		return numeroVotos;
+	}
+
+	/**
+	 * 
+	 * @return Retorna o número de votos nulos da eleição
+	 */
+	public Integer getNumeroVotosNulos() {
+
+		Integer numeroVotos = 0;
+
+		for (Voto v : this.votos) {
+			if (v.numeroCandidato.equals(-1))
+				numeroVotos++;
+		}
+
+		return numeroVotos;
+	}
+
+	/**
 	 * Obtém os resultados da eleição para presidente
 	 * 
 	 * @return mensagem contendo os resultados da eleiçao para presidente
@@ -340,16 +393,8 @@ public class Urna {
 
 			Candidato cand = (Candidato) iterator.next();
 
-			if (!resultados.containsKey(cand)) {
+			resultados.put(cand, this.getNumeroVotos(cand));
 
-				System.out.println(resultados.get(cand));
-				resultados.put(cand, 1);
-
-			} else {
-
-				resultados.put(cand, resultados.get(cand) + 1);
-				System.out.println(resultados.containsKey(cand));
-			}
 		}
 
 		String s = "";
@@ -378,13 +423,7 @@ public class Urna {
 
 			Candidato cand = (Candidato) iterator.next();
 
-			if (resultados.containsKey(cand)) {
-
-				resultados.put(cand, resultados.get(cand) + 1);
-			} else {
-
-				resultados.put(cand, 0);
-			}
+			resultados.put(cand, this.getNumeroVotos(cand));
 		}
 
 		String s = "";
@@ -404,7 +443,83 @@ public class Urna {
 	 * @return mensagem contendo os vencedores
 	 */
 	public String getVencedores() {
-		throw new IllegalStateException("IMPLEMENTAR");
-		// return null;
+
+		Map<Candidato, Integer> resultadosPresidente = new HashMap<Candidato, Integer>(), resultadosSenador = new HashMap<Candidato, Integer>();
+		Candidato presidenteVencedor = null, senadorVencedor = null;
+		Integer presidenteVencedorVotos = null, senadorVencedorVotos = null;
+
+		// Obtem os resultados para presidentes
+		for (Iterator<Candidato> iterator = this.listaDePresidentes.iterator(); iterator
+				.hasNext();) {
+
+			Candidato cand = (Candidato) iterator.next();
+
+			resultadosPresidente.put(cand, this.getNumeroVotos(cand));
+
+		}
+
+		// Obtem o candidato com mais votos
+		for (Map.Entry<Candidato, Integer> Entry : resultadosPresidente
+				.entrySet()) {
+
+			Candidato candidato = Entry.getKey();
+			Integer numVotos = Entry.getValue();
+
+			if (presidenteVencedor == null) {
+				presidenteVencedor = candidato;
+				presidenteVencedorVotos = numVotos;
+			}
+			// TODO verificar empate
+			else {
+				if (presidenteVencedorVotos < numVotos) {
+					presidenteVencedor = candidato;
+					presidenteVencedorVotos = numVotos;
+				}
+			}
+
+		}
+
+		// Obtem os resultados para presidentes
+		for (Iterator<Candidato> iterator = this.listaDeSenadores.iterator(); iterator
+				.hasNext();) {
+
+			Candidato cand = (Candidato) iterator.next();
+
+			resultadosSenador.put(cand, this.getNumeroVotos(cand));
+
+		}
+
+		// Obtem o candidato com mais votos
+		for (Map.Entry<Candidato, Integer> Entry : resultadosSenador.entrySet()) {
+
+			Candidato candidato = Entry.getKey();
+			Integer numVotos = Entry.getValue();
+
+			if (senadorVencedor == null) {
+				senadorVencedor = candidato;
+				senadorVencedorVotos = numVotos;
+			}
+			// TODO verificar empate
+			else {
+				if (senadorVencedorVotos < numVotos) {
+					senadorVencedor = candidato;
+					senadorVencedorVotos = numVotos;
+				}
+			}
+
+		}
+
+		return "Presidente vencedor: " + presidenteVencedor.getNome()
+				+ " Partido: " + presidenteVencedor.getPartido() + " Votos: "
+				+ presidenteVencedorVotos + '\n' + "Senador vencedor: "
+				+ senadorVencedor.getNome() + " Partido: "
+				+ senadorVencedor.getPartido() + " Votos: "
+				+ senadorVencedorVotos;
+	}
+
+	public String getEstatisticasGerais() {
+
+		return this.getNumeroVotosNulos().toString();
+
 	}
 }
