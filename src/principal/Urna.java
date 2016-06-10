@@ -99,8 +99,7 @@ public class Urna {
 	 * @return
 	 */
 	public boolean cadastraCandidatos(String nome, Integer tituloDeEleitor,
-			Integer numeroDeVotacao, String partido, String tipoDeCandidato,
-			BufferedImage foto) {
+			Integer numeroDeVotacao, String partido, String tipoDeCandidato) {
 
 		// -1 é o numero do voto nulo:
 		if (numeroDeVotacao.intValue() < 0) {
@@ -123,14 +122,14 @@ public class Urna {
 				&& (!this.isPresidenteValido(numeroDeVotacao))) {
 
 			this.listaDePresidentes.add(new Candidato(nome, tituloDeEleitor,
-					numeroDeVotacao, partido, tipoDeCandidato, foto));
+					numeroDeVotacao, partido, tipoDeCandidato));
 			this.cadastrarEleitor(nome, tituloDeEleitor);
 
 		} else if ((tipoDeCandidato.toLowerCase().equals(SENADOR))
 				&& (!this.isSenadorValido(numeroDeVotacao))) {
 
 			this.listaDeSenadores.add(new Candidato(nome, tituloDeEleitor,
-					numeroDeVotacao, partido, tipoDeCandidato, foto));
+					numeroDeVotacao, partido, tipoDeCandidato));
 			this.cadastrarEleitor(nome, tituloDeEleitor);
 
 		} else {
@@ -231,7 +230,7 @@ public class Urna {
 	/**
 	 * Finaliza uma eleição em andamento
 	 */
-	public void finalizarEleicao() {
+	public void finalizaEleicao() {
 
 	}
 
@@ -312,7 +311,7 @@ public class Urna {
 	 *            pode ser presidente ou senador
 	 * @return True, se o voto foi registrado, e false se o eleitor já voltou
 	 */
-	public boolean computarVoto(Integer tituloEleitor, Integer numeroCandidato,
+	public boolean computaVoto(Integer tituloEleitor, Integer numeroCandidato,
 			String tipoDeCandidato) {
 
 		// Se o eleitor já voltou, não registra seu voto
@@ -356,7 +355,7 @@ public class Urna {
 		Integer numeroVotos = 0;
 
 		for (Voto v : this.votos) {
-			if (v.numeroCandidato.equals(c.getNumeroDeVotacao()))
+			if (v.getNumeroCandidato().equals(c.getNumeroDeVotacao()))
 				numeroVotos++;
 		}
 
@@ -372,7 +371,7 @@ public class Urna {
 		Integer numeroVotos = 0;
 
 		for (Voto v : this.votos) {
-			if (v.numeroCandidato.equals(-1))
+			if (v.getNumeroCandidato().equals(-1))
 				numeroVotos++;
 		}
 

@@ -2,8 +2,8 @@ package principal;
 
 public class APessoa {
 
-	protected String nome;
-	protected Integer tituloDeEleitor;
+	private String nome;
+	private Integer tituloDeEleitor;
 
 	public APessoa(String nome, Integer tituloDeEleitor) {
 		this.nome = nome;

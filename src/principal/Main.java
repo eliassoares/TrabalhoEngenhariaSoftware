@@ -27,10 +27,10 @@ public class Main {
 				FUNCIONARIO_MATRICULA, FUNCIONARIO_SENHA);
 
 		// TODO REMOVER
-		urna.cadastraCandidatos("Dilma", 1313, 13, "PT", PRESIDENTE, null);
-		urna.cadastraCandidatos("Aecio", 4545, 45, "PSDB", PRESIDENTE, null);
-		urna.cadastraCandidatos("Delcidio", 131313, 130, "PT", SENADOR, null);
-		urna.cadastraCandidatos("Juca", 454545, 450, "PSDB", SENADOR, null);
+		urna.cadastraCandidatos("Dilma", 1313, 13, "PT", PRESIDENTE);
+		urna.cadastraCandidatos("Aecio", 4545, 45, "PSDB", PRESIDENTE);
+		urna.cadastraCandidatos("Delcidio", 131313, 130, "PT", SENADOR);
+		urna.cadastraCandidatos("Juca", 454545, 450, "PSDB", SENADOR);
 		urna.cadastrarEleitor("Eleitor 1", 1);
 		urna.cadastrarEleitor("Eleitor 2", 2);
 		urna.cadastrarEleitor("Eleitor 3", 3);
@@ -220,8 +220,7 @@ public class Main {
 		}
 
 		boolean resultadoCadastro = urna.cadastraCandidatos(nome,
-				tituloDeEleitor, numeroDeVotacao, partido, tipoDeCandidato,
-				null);
+				tituloDeEleitor, numeroDeVotacao, partido, tipoDeCandidato);
 
 		if (resultadoCadastro) {
 			JOptionPane.showMessageDialog(null,
@@ -393,7 +392,7 @@ public class Main {
 						// Confirmou o voto:
 						if (escolha == JOptionPane.OK_OPTION) {
 
-							urna.computarVoto(tituloEleitor, numero, PRESIDENTE);
+							urna.computaVoto(tituloEleitor, numero, PRESIDENTE);
 							break;
 						}
 					} else {
@@ -411,7 +410,7 @@ public class Main {
 
 					// Confirmou o voto:
 					if (escolha == JOptionPane.OK_OPTION) {
-						urna.computarVoto(tituloEleitor, -1, PRESIDENTE);
+						urna.computaVoto(tituloEleitor, -1, PRESIDENTE);
 						break;
 					}
 
@@ -462,7 +461,7 @@ public class Main {
 						// Confirmou o voto:
 						if (escolha == JOptionPane.OK_OPTION) {
 
-							urna.computarVoto(tituloEleitor, numero, SENADOR);
+							urna.computaVoto(tituloEleitor, numero, SENADOR);
 							break;
 						}
 					} else {
@@ -481,7 +480,7 @@ public class Main {
 					// Confirmou o voto:
 					if (escolha == JOptionPane.OK_OPTION) {
 
-						urna.computarVoto(tituloEleitor, -1, SENADOR);
+						urna.computaVoto(tituloEleitor, -1, SENADOR);
 						break;
 					}
 				}
@@ -547,7 +546,7 @@ public class Main {
 
 		if (login) {
 			JOptionPane.showMessageDialog(null, "Teminando a Eleição!");
-			urna.finalizarEleicao();
+			urna.finalizaEleicao();
 			return true;
 		}
 		return false;
