@@ -1,7 +1,5 @@
 package principal;
 
-import java.awt.image.BufferedImage;
-
 public class Candidato extends APessoa {
 
 	private Integer numeroDeVotacao;

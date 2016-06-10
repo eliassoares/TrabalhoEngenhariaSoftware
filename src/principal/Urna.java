@@ -1,6 +1,6 @@
 package principal;
 
-import java.awt.image.BufferedImage;
+import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,9 +28,9 @@ public class Urna {
 	private Integer totalVotos;
 	private List<Integer> jaVotaram;
 
-	public Urna(Integer numeroDeSerie, String nomeFuncionario,
+	public Urna(String nomeFuncionario,
 			Integer tituloDeEleitor, Integer matricula, Integer senha) {
-
+		Random gerador = new Random();
 		// Para iniciar a urna, o funcionário deve ser válido
 		while (!this.isFuncionarioValido(matricula, senha)) {
 
@@ -48,14 +48,14 @@ public class Urna {
 
 		this.funcionario = new Funcionario(nomeFuncionario, tituloDeEleitor,
 				matricula, senha);
-		this.numeroDeSerie = numeroDeSerie;
+		this.numeroDeSerie = gerador.nextInt();
 		this.listaDeEleitores
 				.add(new Eleitor(nomeFuncionario, tituloDeEleitor));
 		this.jaVotaram = new LinkedList<Integer>();
 	}
 
-	public void setNumeroDeSerie(Integer numeroDeSerie) {
-		this.numeroDeSerie = numeroDeSerie;
+	public Integer getNumeroDeSerie(Integer numeroDeSerie) {
+		return this.numeroDeSerie;
 	}
 
 	public Integer getQuantidadePresidentes() {

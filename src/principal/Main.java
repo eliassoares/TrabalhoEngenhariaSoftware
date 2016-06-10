@@ -11,8 +11,6 @@ public class Main {
 	private static String PRESIDENTE = "presidente";
 	private static String SENADOR = "senador";
 
-	// Dados da urna
-	private static Integer NUM_SERIE = 777;
 
 	// Dados do funcionario
 	private static String FUNCIONARIO_NOME = "Alan Turing";
@@ -23,7 +21,7 @@ public class Main {
 	public static void main(String[] args) {
 
 		// Cria uma nova urna
-		Urna urna = new Urna(NUM_SERIE, FUNCIONARIO_NOME, FUNCIONARIO_TITULO,
+		Urna urna = new Urna(FUNCIONARIO_NOME, FUNCIONARIO_TITULO,
 				FUNCIONARIO_MATRICULA, FUNCIONARIO_SENHA);
 
 		// TODO REMOVER
@@ -339,7 +337,7 @@ public class Main {
 							name
 									+ ", seja um eleitor consciente, escolha bem o candidato que irá votar!");
 
-			String[] opcoes = { "Votar", "Anular Voto" };
+			String[] opcoes = { "Votar", "Votar Branco" };
 
 			String s = "";
 
@@ -419,13 +417,14 @@ public class Main {
 
 			// Voto para senador:
 			s = "";
-
+			
 			for (Iterator<String> iterator = infoSen.iterator(); iterator
 					.hasNext();) {
 
 				s += (String) iterator.next() + "\n";
 			}
-
+			
+			Integer numeroSenador1 = 0;
 			while (true) {
 
 				JOptionPane.showMessageDialog(null, s,
@@ -446,6 +445,7 @@ public class Main {
 							numero = Integer.valueOf(JOptionPane
 									.showInputDialog(null,
 											"Insira o número do candidato:"));
+							numeroSenador1 = numero;
 							break;
 						} catch (Exception e) {
 
@@ -474,7 +474,7 @@ public class Main {
 				else if (escolhaOpcao.equalsIgnoreCase(opcoes[1])) {
 
 					int escolha = JOptionPane.showConfirmDialog(null,
-							"Tem certeza que cancelará seu voto?",
+							"Tem certeza que votará em branco?",
 							"Confirme seu voto", JOptionPane.OK_OPTION);
 
 					// Confirmou o voto:
@@ -485,7 +485,78 @@ public class Main {
 					}
 				}
 			}
+			
 
+			JOptionPane.showMessageDialog(null, "Vote agora no segundo Senador",
+					"Candidatos para senador",
+					JOptionPane.INFORMATION_MESSAGE);
+			
+			while (true) {
+
+				JOptionPane.showMessageDialog(null, s,
+						"Candidatos para senador, não vote no mesmo que votou anteriormente.",
+						JOptionPane.INFORMATION_MESSAGE);
+
+				String escolhaOpcao = (String) JOptionPane.showInputDialog(
+						null, "O que deseja fazer?", "Escolha algo",
+						JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[0]);
+
+				if (escolhaOpcao.equalsIgnoreCase(opcoes[0])) {
+
+					Integer numero;
+
+					// executa até receber um número válido ou diferente do primeiro senador
+					while (true) {
+						try {
+							numero = Integer.valueOf(JOptionPane
+									.showInputDialog(null,
+											"Insira o número do candidato:"));
+							if(numero.intValue() == numeroSenador1.intValue()) {
+								JOptionPane.showMessageDialog(null, "Você já votou nesse candidato, por favor, escolha outro!",
+										"Senador Inválido",
+										JOptionPane.ERROR_MESSAGE);
+							}
+							else{
+								break;
+							}
+						} catch (Exception e) {
+
+						}
+					}
+
+					if (urna.isSenadorValido(numero)) {
+
+						int escolha = JOptionPane.showConfirmDialog(null,
+								"Tem certeza que votará nesse senador?",
+								"Confirme seu voto", JOptionPane.OK_OPTION);
+
+						// Confirmou o voto:
+						if (escolha == JOptionPane.OK_OPTION) {
+
+							urna.computaVoto(tituloEleitor, numero, SENADOR);
+							break;
+						}
+					} else {
+
+						JOptionPane.showMessageDialog(null,
+								"Número digitado não existe para senador!");
+					}
+				}
+				// Vai cancelar voto:
+				else if (escolhaOpcao.equalsIgnoreCase(opcoes[1])) {
+
+					int escolha = JOptionPane.showConfirmDialog(null,
+							"Tem certeza que votará em branco?",
+							"Confirme seu voto", JOptionPane.OK_OPTION);
+
+					// Confirmou o voto:
+					if (escolha == JOptionPane.OK_OPTION) {
+
+						urna.computaVoto(tituloEleitor, -1, SENADOR);
+						break;
+					}
+				}
+			}
 			JOptionPane.showMessageDialog(null, "Seu voto foi salvo!");
 		}
 
