@@ -1,16 +1,14 @@
 package principal;
 
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import javax.swing.JOptionPane;
-
-import com.sun.corba.se.impl.encoding.OSFCodeSetRegistry.Entry;
 
 public class Urna {
 
@@ -101,7 +99,7 @@ public class Urna {
 	public boolean cadastraCandidatos(String nome, Integer tituloDeEleitor,
 			Integer numeroDeVotacao, String partido, String tipoDeCandidato) {
 
-		// -1 é o numero do voto nulo:
+		// -2 é o numero do voto nulo e -1 do branco:
 		if (numeroDeVotacao.intValue() < 0) {
 			return false;
 		}
@@ -146,7 +144,6 @@ public class Urna {
 	 * @return True se é válido, false se náo é válido
 	 */
 	public boolean isFuncionarioValido(Integer matricula, Integer senha) {
-
 		return (matricula.intValue() == MATRICULA_PADRAO.intValue())
 				&& (senha.intValue() == SENHA_PADRAO.intValue());
 	}
@@ -158,7 +155,6 @@ public class Urna {
 	 * @return True se é válido, false se náo é válido
 	 */
 	public boolean isPresidenteValido(Integer numero) {
-
 		for (Iterator<Candidato> iterator = listaDePresidentes.iterator(); iterator
 				.hasNext();) {
 
@@ -339,7 +335,6 @@ public class Urna {
 	 * @return True, se o eleitor já votou, se não voltou, retorna false
 	 */
 	public boolean jaVotou(Integer titulo) {
-
 		return this.jaVotaram.contains(titulo);
 	}
 
@@ -364,9 +359,9 @@ public class Urna {
 
 	/**
 	 * 
-	 * @return Retorna o número de votos nulos da eleição
+	 * @return Retorna o número de votos brancos da eleição
 	 */
-	public Integer getNumeroVotosNulos() {
+	public Integer getNumeroVotosBrancos() {
 
 		Integer numeroVotos = 0;
 
@@ -377,6 +372,20 @@ public class Urna {
 
 		return numeroVotos;
 	}
+	
+	/**
+	 * 
+	 * @return Retorna o número de votos nulos da eleição
+	 */
+	public Integer getNumeroVotosNulos() {
+		Integer numeroVotos = 0;
+		for (Voto v : this.votos) {
+			if (v.getNumeroCandidato().equals(-2))
+				numeroVotos++;
+		}
+		return numeroVotos;
+	}
+
 
 	/**
 	 * Obtém os resultados da eleição para presidente
@@ -516,9 +525,28 @@ public class Urna {
 				+ senadorVencedorVotos;
 	}
 
+	
 	public String getEstatisticasGerais() {
-
-		return this.getNumeroVotosNulos().toString();
+		String info = "Presidentes\n";
+		
+		for (Candidato  c : this.listaDePresidentes) {
+			Integer numVotos = this.getNumeroVotos(c);
+			info += "Nome: " + c.getNome() + " Número: "+ c.getNumeroDeVotacao() 
+			+ " %Votos: "+ String.valueOf(((float)numVotos / this.totalVotos)) + "\n";
+		}
+		
+		info += "Sendadores\n";
+		
+		for (Candidato  c : this.listaDeSenadores) {
+			Integer numVotos = this.getNumeroVotos(c);
+			info += "Nome: " + c.getNome() + " Número: "+ c.getNumeroDeVotacao() 
+			+ " %Votos: "+ String.valueOf(((float)numVotos / this.totalVotos)) + "\n";
+		}
+		
+		info += "%Brancos: " + String.valueOf(((float) this.getNumeroVotosBrancos() / this.totalVotos)) + "\n";
+		info += "%Nulos: " + String.valueOf(((float) this.getNumeroVotosNulos() / this.totalVotos)) + "\n";
+		info += "Total: " + String.valueOf(this.totalVotos);
+		return info;
 
 	}
 }
