@@ -14,7 +14,7 @@ public class Candidato extends APessoa {
 		this.numeroDeVotacao = numeroDeVotacao;
 		this.partido = partido;
 		this.tipoDeCandidato = tipoDeCandidato;
-		// TODO ver como ler foto
+
 	}
 
 	public Integer getNumeroDeVotacao() {
@@ -23,6 +23,10 @@ public class Candidato extends APessoa {
 
 	public String getPartido() {
 		return partido;
+	}
+
+	public String getTipoDeCandidato() {
+		return tipoDeCandidato;
 	}
 
 }

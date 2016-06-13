@@ -20,15 +20,15 @@ public class Voto {
 		this.numeroCandidato = numeroCandidato;
 		this.tipoCandidato = tipoCandidato;
 	}
-	
+
 	public Integer getTituloEleitor() {
 		return this.tituloEleitor;
 	}
-	
+
 	public Integer getNumeroCandidato() {
 		return this.numeroCandidato;
 	}
-	
+
 	public String getTipoCandidato() {
 		return this.tipoCandidato;
 	}

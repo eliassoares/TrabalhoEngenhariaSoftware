@@ -26,8 +26,8 @@ public class Urna {
 	private Integer totalVotos;
 	private List<Integer> jaVotaram;
 
-	public Urna(String nomeFuncionario,
-			Integer tituloDeEleitor, Integer matricula, Integer senha) {
+	public Urna(String nomeFuncionario, Integer tituloDeEleitor,
+			Integer matricula, Integer senha) {
 		Random gerador = new Random();
 		// Para iniciar a urna, o funcionário deve ser válido
 		while (!this.isFuncionarioValido(matricula, senha)) {
@@ -372,7 +372,7 @@ public class Urna {
 
 		return numeroVotos;
 	}
-	
+
 	/**
 	 * 
 	 * @return Retorna o número de votos nulos da eleição
@@ -385,7 +385,6 @@ public class Urna {
 		}
 		return numeroVotos;
 	}
-
 
 	/**
 	 * Obtém os resultados da eleição para presidente
@@ -525,26 +524,33 @@ public class Urna {
 				+ senadorVencedorVotos;
 	}
 
-	
 	public String getEstatisticasGerais() {
 		String info = "Presidentes\n";
-		
-		for (Candidato  c : this.listaDePresidentes) {
+
+		for (Candidato c : this.listaDePresidentes) {
 			Integer numVotos = this.getNumeroVotos(c);
-			info += "Nome: " + c.getNome() + " Número: "+ c.getNumeroDeVotacao() 
-			+ " %Votos: "+ String.valueOf(((float)numVotos / this.totalVotos)) + "\n";
+			info += "Nome: " + c.getNome() + " Número: "
+					+ c.getNumeroDeVotacao() + " %Votos: "
+					+ String.valueOf(((float) numVotos / this.totalVotos))
+					+ "\n";
 		}
-		
+
 		info += "Sendadores\n";
-		
-		for (Candidato  c : this.listaDeSenadores) {
+
+		for (Candidato c : this.listaDeSenadores) {
 			Integer numVotos = this.getNumeroVotos(c);
-			info += "Nome: " + c.getNome() + " Número: "+ c.getNumeroDeVotacao() 
-			+ " %Votos: "+ String.valueOf(((float)numVotos / this.totalVotos)) + "\n";
+			info += "Nome: " + c.getNome() + " Número: "
+					+ c.getNumeroDeVotacao() + " %Votos: "
+					+ String.valueOf(((float) numVotos / this.totalVotos))
+					+ "\n";
 		}
-		
-		info += "%Brancos: " + String.valueOf(((float) this.getNumeroVotosBrancos() / this.totalVotos)) + "\n";
-		info += "%Nulos: " + String.valueOf(((float) this.getNumeroVotosNulos() / this.totalVotos)) + "\n";
+
+		info += "%Brancos: "
+				+ String.valueOf(((float) this.getNumeroVotosBrancos() / this.totalVotos))
+				+ "\n";
+		info += "%Nulos: "
+				+ String.valueOf(((float) this.getNumeroVotosNulos() / this.totalVotos))
+				+ "\n";
 		info += "Total: " + String.valueOf(this.totalVotos);
 		return info;
 
