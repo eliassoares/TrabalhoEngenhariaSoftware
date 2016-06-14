@@ -1,6 +1,6 @@
 Esse arquivo descreve como se executar o programa.
 
-Na localização src/, pode-se encontrar o arquivo 'executavel.jar'. Esse arquivo é o executável do nosso programa.
+Nesse mesmo diretório, pode-se encontrar o arquivo 'executavel.jar'. Esse arquivo é o executável do nosso programa.
 
 Requisitos para execução:
 	- Possuir uma versão do Java 1.7 ou superior instalada no computador
