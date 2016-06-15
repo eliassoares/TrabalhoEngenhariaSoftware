@@ -6,7 +6,7 @@ Requisitos para execução:
 
 	- Possuir uma versão do Java 1.7 ou superior instalada no computador
 
-Formas de execução: 
+Formas de execução. Qualquer umas das 3 formas mostradas abaixo pode ser utilizada para executar o programa: 
 
 	- Basta dar um duplo-clique sobre o arquivo 'executavel.jar' e ele abrirá o sistema de eleição
 	
@@ -16,4 +16,4 @@ Formas de execução:
 	
 Dados necessários:
 
-	- Para finalizar uma eleição, o número de matrícula do funcionário deve ser 0, bem como sua senha também deve ser 0
+	- Para finalizar uma eleição, número de matrícula = 0, senha = 0
